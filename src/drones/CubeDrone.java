@@ -52,12 +52,44 @@ public class CubeDrone extends Drone{
 			   !super.flySpace.getOuterBoundaries().checkCubeIntersection(newCube);
 	}
 	
-	/*
+	
 	private boolean getAroundObstacle(String initialCommand)
 	{		
-
+		switch (initialCommand)
+		{
+		
+		case "up":
+			String[] up = {"left", "up", "right"};
+			getAround(up);
+			return true;
+			
+		case "down":
+			String[] down = {"left", "down", "right"};
+			getAround(down);
+			return true;
+			
+		case "left":
+			String[] left = {"left", "up", "right"};
+			getAround(left);
+			return true;
+			
+		case "right":
+			String[] right = {"left", "up", "right"};
+			getAround(right);
+			return true;
+			
+		case "back":
+			String[] back = {"left", "up", "right"};
+			getAround(back);
+			return true;
+			
+		case "forth":
+			String[] forth = {"left", "up", "right"};
+			getAround(forth);
+			return true;	
+		}
 	}
-	*/
+	
 	
 	@Override
 	public String moveUp() {
@@ -117,6 +149,40 @@ public class CubeDrone extends Drone{
 			drone.getMaxCoordinates()[2] -= 1;
 		}
 		return drone.toString();
+	}
+	
+	
+	
+	///HELPER METHOD///
+	
+	public void getAround(String[] sequence) {
+		for (int i = 0; i < sequence.length; i++) {
+			switch (sequence[i]) {
+			case "up":
+				moveUp();
+				break;
+
+			case "down":
+				moveDown();
+				break;
+
+			case "left":
+				moveLeft();
+				break;
+
+			case "right":
+				moveRight();
+				break;
+
+			case "back":
+				moveBack();
+				break;
+
+			case "forth":
+				moveForth();
+				break;
+			}
+		}
 	}
 	
 }
