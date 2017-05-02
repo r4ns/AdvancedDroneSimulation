@@ -3,18 +3,18 @@ package drones;
 import java.util.List;
 
 public class CubeDrone extends Drone{
-	
+
 	Cube drone = null;
 	Cube newCube = null;
 	private boolean obstacleHit = false;
 	private int moveCounter;
-		
+
 	public CubeDrone(Cube outerBoundaries, Cube innerBoundaries, int [] droneStartCoordinates, int dronSide)
 	{
 		super(outerBoundaries, innerBoundaries);
 		this.drone = new Cube(droneStartCoordinates, dronSide);
 	}
-	
+
 	public CubeDrone(Cube outerBoundaries, Cube innerBoundaries, int [] droneStartCoordinates, int dronSide, List<Cube> obstacles)
 	{
 		super(outerBoundaries, innerBoundaries, obstacles);
@@ -24,6 +24,7 @@ public class CubeDrone extends Drone{
 	@Override
 	protected boolean validateDronePositionAfter(String command)
 	{
+		obstacleHit=false;
 		int[] minCoordinates = drone.getMinCoordinates();
 		int droneSide = drone.getCubeSideLength();
 		newCube = new Cube(minCoordinates, droneSide);
@@ -48,23 +49,87 @@ public class CubeDrone extends Drone{
 			newCube.decreaseZ(1);
 			break;
 		}
-		return !super.flySpace.getInnerBoundaries().checkCubeIntersection(newCube) ||
-			   !super.flySpace.getOuterBoundaries().checkCubeIntersection(newCube);
+
+		if(super.flySpace.getObstacles()==null){
+			return !super.flySpace.getInnerBoundaries().checkCubeIntersection(newCube) ||
+					!super.flySpace.getOuterBoundaries().checkCubeIntersection(newCube);
+		}else{
+			return (!super.flySpace.getInnerBoundaries().checkCubeIntersection(newCube) ||
+					!super.flySpace.getOuterBoundaries().checkCubeIntersection(newCube))&&
+					validateDronePositionAfterForObstacle(newCube);
+		}
+
 	}
-	
-	/*
+
+	private boolean validateDronePositionAfterForObstacle(Cube newCube)
+	{
+		for(int i=0;i<super.flySpace.getObstacles().size();i++){
+			if(super.flySpace.getObstacles().get(i).checkCubeIntersection(newCube)){
+				obstacleHit=true;
+				return false;
+			}
+		}
+		return true;
+	}
+
 	private boolean getAroundObstacle(String initialCommand)
 	{		
 
+		if(initialCommand == "up" || initialCommand == "down"){
+			if(validateDronePositionAfter("left")){
+				moveLeft();
+			}else if(validateDronePositionAfter("right")){
+				moveRight();
+			}else if(validateDronePositionAfter("forth")){
+				moveForth();
+			}
+			else if(validateDronePositionAfter("back")){
+				moveBack();
+			}else{
+				return false;
+			}
+		}else if(initialCommand == "left" || initialCommand == "right"){
+			if(validateDronePositionAfter("up")){
+				moveUp();
+			}else if(validateDronePositionAfter("down")){
+				moveDown();
+			}else if(validateDronePositionAfter("forth")){
+				moveForth();
+			}
+			else if(validateDronePositionAfter("back")){
+				moveBack();
+			}else{
+				return false;
+			}
+		}else{
+			if(validateDronePositionAfter("up")){
+				moveUp();
+			}else if(validateDronePositionAfter("down")){
+				moveDown();
+			}else if(validateDronePositionAfter("left")){
+				moveLeft();
+			}
+			else if(validateDronePositionAfter("right")){
+				moveRight();
+			}else{
+				return false;
+			}
+		}
+
+
+		return true;
 	}
-	*/
-	
+
+
 	@Override
 	public String moveUp() {
 		if(validateDronePositionAfter("up"))
 		{
 			drone.getMinCoordinates()[1] += 1;
 			drone.getMaxCoordinates()[1] += 1;
+		}else if(obstacleHit){
+			if(getAroundObstacle("up"))
+				moveUp();
 		}
 		return drone.toString();
 	}
@@ -75,6 +140,9 @@ public class CubeDrone extends Drone{
 		{
 			drone.getMinCoordinates()[1] -= 1;
 			drone.getMaxCoordinates()[1] -= 1;
+		}else if(obstacleHit){
+			if(getAroundObstacle("down"))
+				moveDown();
 		}
 		return drone.toString();
 	}
@@ -85,6 +153,9 @@ public class CubeDrone extends Drone{
 		{
 			drone.getMinCoordinates()[0] -= 1;
 			drone.getMaxCoordinates()[0] -= 1;
+		}else if(obstacleHit){
+			if(getAroundObstacle("left"))
+				moveLeft();
 		}
 		return drone.toString();
 	}
@@ -95,6 +166,9 @@ public class CubeDrone extends Drone{
 		{
 			drone.getMinCoordinates()[0] += 1;
 			drone.getMaxCoordinates()[0] += 1;
+		}else if(obstacleHit){
+			if(getAroundObstacle("right"))
+				moveRight();
 		}
 		return drone.toString();
 	}
@@ -105,6 +179,9 @@ public class CubeDrone extends Drone{
 		{
 			drone.getMinCoordinates()[2] += 1;
 			drone.getMaxCoordinates()[2] += 1;
+		}else if(obstacleHit){
+			if(getAroundObstacle("back"))
+				moveBack();
 		}
 		return drone.toString();
 	}
@@ -115,8 +192,11 @@ public class CubeDrone extends Drone{
 		{
 			drone.getMinCoordinates()[2] -= 1;
 			drone.getMaxCoordinates()[2] -= 1;
+		}else if(obstacleHit){
+			if(getAroundObstacle("forth"))
+				moveForth();
 		}
 		return drone.toString();
 	}
-	
+
 }
