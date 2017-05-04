@@ -67,6 +67,7 @@ public class CubeDrone extends Drone{
  				moveBack();
  			} else{
  				return false;
+ 				
  			}
  		} /* up v down statement end */
  		else if(initialCommand=="left" || initialCommand=="right"){
@@ -108,8 +109,7 @@ public class CubeDrone extends Drone{
 		}
 		return drone.toString();
 	}
-
-	@Override
+	
 	public String moveDown() {
 		if(validateDronePositionAfter("down"))
 		{
