@@ -2,28 +2,25 @@ package drones;
 
 import java.util.List;
 
-public class CubeDrone extends Drone{
-	
+public class CubeDrone extends Drone {
+
 	Cube drone = null;
 	Cube newCube = null;
 	private boolean obstacleHit = false;
-	private int moveCounter;
-		
-	public CubeDrone(Cube outerBoundaries, Cube innerBoundaries, int [] droneStartCoordinates, int dronSide)
-	{
+
+	public CubeDrone(Cube outerBoundaries, Cube innerBoundaries, int[] droneStartCoordinates, int dronSide) {
 		super(outerBoundaries, innerBoundaries);
 		this.drone = new Cube(droneStartCoordinates, dronSide);
 	}
-	
-	public CubeDrone(Cube outerBoundaries, Cube innerBoundaries, int [] droneStartCoordinates, int dronSide, List<Cube> obstacles)
-	{
+
+	public CubeDrone(Cube outerBoundaries, Cube innerBoundaries, int[] droneStartCoordinates, int dronSide,
+			List<Cube> obstacles) {
 		super(outerBoundaries, innerBoundaries, obstacles);
 		this.drone = new Cube(droneStartCoordinates, dronSide);
 	}
 
-	@Override
-	protected boolean validateDronePositionAfter(String command)
-	{
+	protected boolean validateDronePositionAfter(String command) {
+		obstacleHit = false;
 		int[] minCoordinates = drone.getMinCoordinates();
 		int droneSide = drone.getCubeSideLength();
 		newCube = new Cube(minCoordinates, droneSide);
@@ -48,75 +45,130 @@ public class CubeDrone extends Drone{
 			newCube.decreaseZ(1);
 			break;
 		}
-		return !super.flySpace.getInnerBoundaries().checkCubeIntersection(newCube) ||
-			   !super.flySpace.getOuterBoundaries().checkCubeIntersection(newCube);
+		if (flySpace.getObstacles() == null) {
+			return !super.flySpace.getInnerBoundaries().checkCubeIntersection(newCube)
+					|| !super.flySpace.getOuterBoundaries().checkCubeIntersection(newCube);
+		} else {
+			return (!flySpace.getInnerBoundaries().checkCubeIntersection(newCube)
+					|| !flySpace.getOuterBoundaries().checkCubeIntersection(newCube))
+					&& validateDronePositionAfterForObstacle(newCube);
+		}
 	}
-	
-	/*
-	private boolean getAroundObstacle(String initialCommand)
-	{		
 
+	private boolean getAroundObstacle(String initialCommand) {
+		if (initialCommand == "up" || initialCommand == "down") {
+			if (validateDronePositionAfter("left")) {
+				moveLeft();
+			} else if (validateDronePositionAfter("right")) {
+				moveRight();
+			} else if (validateDronePositionAfter("forth")) {
+				moveForth();
+			} else if (validateDronePositionAfter("back")) {
+				moveBack();
+			} else {
+				return false;
+			}
+		} else if (initialCommand == "left" || initialCommand == "right") {
+			if (validateDronePositionAfter("up")) {
+				moveUp();
+			} else if (validateDronePositionAfter("down")) {
+				moveDown();
+			} else if (validateDronePositionAfter("forth")) {
+				moveForth();
+			} else if (validateDronePositionAfter("back")) {
+				moveBack();
+			} else {
+				return false;
+			}
+		} else if (initialCommand == "forth" || initialCommand == "back") {
+			if (validateDronePositionAfter("left")) {
+				moveLeft();
+			} else if (validateDronePositionAfter("right")) {
+				moveRight();
+			} else if (validateDronePositionAfter("up")) {
+				moveUp();
+			} else if (validateDronePositionAfter("down")) {
+				moveDown();
+			} else {
+				return false;
+			}
+		}
+		return true;
 	}
-	*/
-	
-	@Override
+
+	private boolean validateDronePositionAfterForObstacle(Cube newCube2) {
+		for (int i = 0; i < flySpace.getObstacles().size(); i++) {
+			if (flySpace.getObstacles().get(i).checkCubeIntersection(newCube2)) {
+				obstacleHit = true;
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public String moveUp() {
-		if(validateDronePositionAfter("up"))
-		{
+		if (validateDronePositionAfter("up")) {
 			drone.getMinCoordinates()[1] += 1;
 			drone.getMaxCoordinates()[1] += 1;
+		} else if (obstacleHit) {
+			if (getAroundObstacle("up"))
+				moveUp();
 		}
 		return drone.toString();
 	}
 
-	@Override
 	public String moveDown() {
-		if(validateDronePositionAfter("down"))
-		{
+		if (validateDronePositionAfter("down")) {
 			drone.getMinCoordinates()[1] -= 1;
 			drone.getMaxCoordinates()[1] -= 1;
+		} else if (obstacleHit) {
+			if (getAroundObstacle("down"))
+				moveDown();
 		}
 		return drone.toString();
 	}
 
-	@Override
-	public String moveLeft() {
-		if(validateDronePositionAfter("left"))
-		{
-			drone.getMinCoordinates()[0] -= 1;
-			drone.getMaxCoordinates()[0] -= 1;
-		}
-		return drone.toString();
-	}
-
-	@Override
 	public String moveRight() {
-		if(validateDronePositionAfter("right"))
-		{
+		if (validateDronePositionAfter("right")) {
 			drone.getMinCoordinates()[0] += 1;
 			drone.getMaxCoordinates()[0] += 1;
-		}
-		return drone.toString();
-	}
-
-	@Override
-	public String moveBack() {
-		if(validateDronePositionAfter("back"))
-		{
-			drone.getMinCoordinates()[2] += 1;
-			drone.getMaxCoordinates()[2] += 1;
-		}
-		return drone.toString();
-	}
-
-	@Override
-	public String moveForth() {
-		if(validateDronePositionAfter("forth"))
-		{
-			drone.getMinCoordinates()[2] -= 1;
-			drone.getMaxCoordinates()[2] -= 1;
+		} else if (obstacleHit) {
+			if (getAroundObstacle("right"))
+				moveRight();
 		}
 		return drone.toString();
 	}
 	
+	public String moveLeft() {
+		if (validateDronePositionAfter("left")) {
+			drone.getMinCoordinates()[0] -= 1;
+			drone.getMaxCoordinates()[0] -= 1;
+		} else if (obstacleHit) {
+			if (getAroundObstacle("left"))
+				moveLeft();
+		}
+		return drone.toString();
+	}
+	
+	public String moveForth() {
+		if (validateDronePositionAfter("forth")) {
+			drone.getMinCoordinates()[2] -= 1;
+			drone.getMaxCoordinates()[2] -= 1;
+		} else if (obstacleHit) {
+			if (getAroundObstacle("forth"))
+				moveForth();
+		}
+		return drone.toString();
+	}
+
+	public String moveBack() {
+		if (validateDronePositionAfter("back")) {
+			drone.getMinCoordinates()[2] += 1;
+			drone.getMaxCoordinates()[2] += 1;
+		} else if (obstacleHit) {
+			if (getAroundObstacle("back"))
+				moveBack();
+		}
+		return drone.toString();
+	}
 }
