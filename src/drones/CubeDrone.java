@@ -27,7 +27,8 @@ public class CubeDrone extends Drone{
 		int[] minCoordinates = drone.getMinCoordinates();
 		int droneSide = drone.getCubeSideLength();
 		newCube = new Cube(minCoordinates, droneSide);
-
+		
+		
 		switch (command) {
 		case "up":
 			newCube.increaseY(1);
@@ -48,16 +49,119 @@ public class CubeDrone extends Drone{
 			newCube.decreaseZ(1);
 			break;
 		}
-		return !super.flySpace.getInnerBoundaries().checkCubeIntersection(newCube) ||
-			   !super.flySpace.getOuterBoundaries().checkCubeIntersection(newCube);
+		
+		if(super.flySpace.getObstacles()==null){
+			return !super.flySpace.getInnerBoundaries().checkCubeIntersection(newCube) ||
+					   !super.flySpace.getOuterBoundaries().checkCubeIntersection(newCube);
+		} else {
+			return (!super.flySpace.getInnerBoundaries().checkCubeIntersection(newCube) ||
+					   !super.flySpace.getOuterBoundaries().checkCubeIntersection(newCube))&&
+					   checkDroneHittingObstacle(command,newCube);
+		}
 	}
 	
-	/*
-	private boolean getAroundObstacle(String initialCommand)
-	{		
-
+	protected boolean checkDroneHittingObstacle (String command, Cube newCube)
+	{
+		for(int i=0; i < super.flySpace.getObstacles().size(); i++){
+			if (super.flySpace.getObstacles().get(i).checkCubeIntersection(newCube)) {
+				obstacleHit = true;
+				return false;
+			}
+		}
+		obstacleHit = false;
+		return true;
 	}
-	*/
+	
+	private boolean getAroundObstacle(String initialCommand)
+	{
+		switch (initialCommand) {
+		case "up":
+			if (validateDronePositionAfter("left")) {
+				this.moveLeft();
+			} else if (validateDronePositionAfter("right")) {
+				this.moveRight();
+			} else if (validateDronePositionAfter("forth")) {
+				this.moveForth();
+			} else if (validateDronePositionAfter("back")) {
+				this.moveBack();
+			} else {
+				return false;
+			}
+			break;
+			
+		case "down":
+			if (validateDronePositionAfter("left")) {
+				this.moveLeft();
+			} else if (validateDronePositionAfter("right")) {
+				this.moveRight();
+			} else if (validateDronePositionAfter("forth")) {
+				this.moveForth();
+			} else if (validateDronePositionAfter("back")) {
+				this.moveBack();
+			} else {
+				return false;
+			}
+			break;
+			
+		case "left":
+			if (validateDronePositionAfter("back")) {
+				this.moveBack();
+			} else if (validateDronePositionAfter("up")) {
+				this.moveUp();
+			} else if (validateDronePositionAfter("down")) {
+				this.moveDown();
+			} else if (validateDronePositionAfter("forth")) {
+				this.moveForth();
+			} else {
+				return false;
+			}
+			break;
+			
+		case "right":
+			if (validateDronePositionAfter("up")) {
+				this.moveUp();
+			} else if (validateDronePositionAfter("down")) {
+				this.moveDown();
+			} else if (validateDronePositionAfter("forth")) {
+				this.moveForth();
+			} else if (validateDronePositionAfter("back")) {
+				this.moveBack();
+			} else {
+				return false;
+			}
+			break;
+			
+		case "back":
+			if (validateDronePositionAfter("left")) {
+				this.moveLeft();
+			} else if (validateDronePositionAfter("right")) {
+				this.moveRight();
+			} else if (validateDronePositionAfter("up")) {
+				this.moveUp();
+			} else if (validateDronePositionAfter("down")) {
+				this.moveDown();
+			} else {
+				return false;
+			}
+			break;
+			
+		case "forth":
+			if (validateDronePositionAfter("left")) {
+				this.moveLeft();
+			} else if (validateDronePositionAfter("right")) {
+				this.moveRight();
+			} else if (validateDronePositionAfter("up")) {
+				this.moveUp();
+			} else if (validateDronePositionAfter("down")) {
+				this.moveDown();
+			} else {
+				return false;
+			}
+			break;
+		}
+		return true;
+}	
+	
 	
 	@Override
 	public String moveUp() {
@@ -65,6 +169,10 @@ public class CubeDrone extends Drone{
 		{
 			drone.getMinCoordinates()[1] += 1;
 			drone.getMaxCoordinates()[1] += 1;
+		}
+		else if(this.obstacleHit == true) {
+			if (this.getAroundObstacle("up"))
+				this.moveUp();
 		}
 		return drone.toString();
 	}
@@ -76,6 +184,10 @@ public class CubeDrone extends Drone{
 			drone.getMinCoordinates()[1] -= 1;
 			drone.getMaxCoordinates()[1] -= 1;
 		}
+		else if (this.obstacleHit == true) {
+			if (this.getAroundObstacle("down"))
+				this.moveDown();
+		}
 		return drone.toString();
 	}
 
@@ -85,6 +197,10 @@ public class CubeDrone extends Drone{
 		{
 			drone.getMinCoordinates()[0] -= 1;
 			drone.getMaxCoordinates()[0] -= 1;
+		}
+		else if (this.obstacleHit == true) {
+			if (this.getAroundObstacle("left"))
+				this.moveLeft();
 		}
 		return drone.toString();
 	}
@@ -96,6 +212,10 @@ public class CubeDrone extends Drone{
 			drone.getMinCoordinates()[0] += 1;
 			drone.getMaxCoordinates()[0] += 1;
 		}
+		else if (this.obstacleHit == true) {
+			if (this.getAroundObstacle("right"))
+				this.moveRight();
+		}
 		return drone.toString();
 	}
 
@@ -106,6 +226,10 @@ public class CubeDrone extends Drone{
 			drone.getMinCoordinates()[2] += 1;
 			drone.getMaxCoordinates()[2] += 1;
 		}
+		else if (this.obstacleHit == true) {
+			if (this.getAroundObstacle("back"))
+				this.moveBack();
+		}
 		return drone.toString();
 	}
 
@@ -115,6 +239,10 @@ public class CubeDrone extends Drone{
 		{
 			drone.getMinCoordinates()[2] -= 1;
 			drone.getMaxCoordinates()[2] -= 1;
+		}
+		else if (this.obstacleHit == true) {
+			if (this.getAroundObstacle("forth"))
+				this.moveForth();
 		}
 		return drone.toString();
 	}
