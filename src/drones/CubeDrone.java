@@ -8,6 +8,7 @@ public class CubeDrone extends Drone{
 	Cube newCube = null;
 	private boolean obstacleHit = false;
 	private int moveCounter;
+	List<Cube> prepreke;
 		
 	public CubeDrone(Cube outerBoundaries, Cube innerBoundaries, int [] droneStartCoordinates, int dronSide)
 	{
@@ -24,12 +25,14 @@ public class CubeDrone extends Drone{
 	@Override
 	protected boolean validateDronePositionAfter(String command)
 	{
+		obstacleHit=false;
 		int[] minCoordinates = drone.getMinCoordinates();
 		int droneSide = drone.getCubeSideLength();
 		newCube = new Cube(minCoordinates, droneSide);
 
 		switch (command) {
 		case "up":
+			
 			newCube.increaseY(1);
 			break;
 		case "down":
@@ -48,16 +51,73 @@ public class CubeDrone extends Drone{
 			newCube.decreaseZ(1);
 			break;
 		}
+		
 		return !super.flySpace.getInnerBoundaries().checkCubeIntersection(newCube) ||
-			   !super.flySpace.getOuterBoundaries().checkCubeIntersection(newCube);
+				   !super.flySpace.getOuterBoundaries().checkCubeIntersection(newCube);
+		
+		
+		
 	}
 	
-	/*
+	
 	private boolean getAroundObstacle(String initialCommand)
-	{		
-
+	{	
+		int[] minCoordinates = drone.getMinCoordinates();
+		int droneSide = drone.getCubeSideLength();
+		Cube cube = new Cube(minCoordinates, droneSide);
+		//prepreke.add(new Cube(new int[] {30,2,30}, 5));
+		
+		for (int i=0; i<super.flySpace.getObstacles().size(); i++)
+		{
+			if (initialCommand == "up")
+			{
+				cube.increaseY(1);
+				if (cube.checkCubeIntersection(super.flySpace.getObstacles().get(i)))
+				{
+					cube.decreaseY(1);
+					obstacleHit=false;
+					//Cube [] niz=(Cube[]) super.flySpace.getObstacles().toArray();
+					Cube kocka = (Cube) super.flySpace.getObstacles();
+					
+					
+					if (validateDronePositionAfter("right"))
+					{
+						moveCounter=cube.getMinCoordinates()[0]-kocka.getMinCoordinates()[0];
+						for (int j=moveCounter; j>0; j--)
+						{
+							moveRight();
+						}
+						
+						if (moveCounter==0)
+						{
+							moveUp();
+						}
+						
+					} else if (validateDronePositionAfter("left"))
+					{
+						moveCounter=cube.getMinCoordinates()[0]-kocka.getMinCoordinates()[0];
+						
+						for (int j=moveCounter; j>0; j--)
+						{
+							moveLeft();
+						}
+						
+						if (moveCounter==0)
+						{
+							moveUp();
+						}
+						
+					} 
+					
+					
+				} 
+			} else 
+				return false;
+		}
+		
+		return true;
 	}
-	*/
+	
 	
 	@Override
 	public String moveUp() {
