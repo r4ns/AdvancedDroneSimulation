@@ -14,6 +14,7 @@ import space.FlySpace;
 
 public class CubeDroneTest {
 
+	
 	CubeDrone drone;
 	FlySpace flySpace;
 	Cube cube;
