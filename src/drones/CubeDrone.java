@@ -90,10 +90,10 @@ public class CubeDrone extends Drone{
 			}
 			break;
 		case "down":
-			if(validateDronePositionAfter("left")){
-				moveLeft();
-			}else if(validateDronePositionAfter("right")){
+			if(validateDronePositionAfter("right")){
 				moveRight();
+			}else if(validateDronePositionAfter("left")){
+				moveLeft();
 			}else if(validateDronePositionAfter("forth")){
 				moveForth();
 			}
@@ -118,10 +118,10 @@ public class CubeDrone extends Drone{
 			}
 			break;
 		case "right":
-			if(validateDronePositionAfter("up")){
-				moveUp();
-			}else if(validateDronePositionAfter("down")){
+			if(validateDronePositionAfter("down")){
 				moveDown();
+			}else if(validateDronePositionAfter("up")){
+				moveUp();
 			}else if(validateDronePositionAfter("forth")){
 				moveForth();
 			}
@@ -132,10 +132,10 @@ public class CubeDrone extends Drone{
 			}
 			break;
 		case "back":
-			if(validateDronePositionAfter("up")){
-				moveUp();
-			}else if(validateDronePositionAfter("down")){
+			if(validateDronePositionAfter("down")){
 				moveDown();
+			}else if(validateDronePositionAfter("up")){
+				moveUp();
 			}else if(validateDronePositionAfter("left")){
 				moveLeft();
 			}
