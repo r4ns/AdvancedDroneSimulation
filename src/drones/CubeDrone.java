@@ -1,5 +1,6 @@
 package drones;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class CubeDrone extends Drone{
@@ -51,13 +52,55 @@ public class CubeDrone extends Drone{
 		return !super.flySpace.getInnerBoundaries().checkCubeIntersection(newCube) ||
 			   !super.flySpace.getOuterBoundaries().checkCubeIntersection(newCube);
 	}
-	
-	/*
-	private boolean getAroundObstacle(String initialCommand)
-	{		
 
+	private boolean getAroundObstacle(String initialCommand){	
+		Iterator<Cube> it = flySpace.getObstacles().iterator();
+		while(it.hasNext()){
+			Cube c =(Cube) it.next();
+			if(drone.checkIfCubesAreTouching(c)){
+				obstacleHit = true;
+				if(initialCommand == "up" || initialCommand == "down"){
+					if(validateDronePositionAfter("left"))
+						moveLeft();
+					else if(validateDronePositionAfter("right"))
+						moveRight();
+					else if(validateDronePositionAfter("back"))
+						moveBack();
+					else if(validateDronePositionAfter("forth"))
+						moveForth();
+					else
+						return false;
+				}
+				else if(initialCommand == "left" || initialCommand == "right"){
+					if(validateDronePositionAfter("up"))
+						moveUp();
+					else if(validateDronePositionAfter("down"))
+						moveDown();
+					else if(validateDronePositionAfter("back"))
+						moveBack();
+					else if(validateDronePositionAfter("forth"))
+						moveForth();
+					else
+						return false;
+					
+				}
+				else{
+					if(validateDronePositionAfter("left"))
+						moveLeft();
+					else if(validateDronePositionAfter("right"))
+						moveRight();
+					if(validateDronePositionAfter("left"))
+						moveLeft();
+					else if(validateDronePositionAfter("right"))
+						moveRight();
+					else
+						return false;
+				}
+					
+			}
+		}
+		return true;
 	}
-	*/
 	
 	@Override
 	public String moveUp() {
