@@ -30,6 +30,7 @@ public class CubeDroneTest {
 		String expectedResponse = expectedDronePosition.toString();
 		
 		assertEquals(expectedResponse, drone.moveUp());
+		//
 	}
 	
 	@Test
@@ -42,7 +43,7 @@ public class CubeDroneTest {
 		drone=new CubeDrone(outerCube, innerCube, new int []{30,1,30},1);
 		String expectedResponse=expectedDronePosition.toString();
 		assertEquals(expectedResponse, drone.moveDown());
-		
+		//
 	}
 	@Test 
 	public void testInitialMoveRigth()

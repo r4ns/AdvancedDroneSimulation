@@ -67,6 +67,7 @@ public class CubeDrone extends Drone{
 		Cube cube = new Cube(minCoordinates, droneSide);
 		//prepreke.add(new Cube(new int[] {30,2,30}, 5));
 		
+		
 		for (int i=0; i<super.flySpace.getObstacles().size(); i++)
 		{
 			if (initialCommand == "up")
@@ -79,7 +80,7 @@ public class CubeDrone extends Drone{
 					//Cube [] niz=(Cube[]) super.flySpace.getObstacles().toArray();
 					Cube kocka = (Cube) super.flySpace.getObstacles();
 					
-					
+				
 					if (validateDronePositionAfter("right"))
 					{
 						moveCounter=cube.getMinCoordinates()[0]-kocka.getMinCoordinates()[0];
@@ -108,7 +109,6 @@ public class CubeDrone extends Drone{
 						}
 						
 					} 
-					
 					
 				} 
 			} else 
