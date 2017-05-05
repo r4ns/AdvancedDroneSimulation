@@ -13,7 +13,7 @@ import java.util.List;
 import space.FlySpace;
 
 public class CubeDroneTest {
- 
+
 	CubeDrone drone;
 	FlySpace flySpace;
 	Cube cube;
