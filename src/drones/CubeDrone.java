@@ -52,12 +52,99 @@ public class CubeDrone extends Drone{
 			   !super.flySpace.getOuterBoundaries().checkCubeIntersection(newCube);
 	}
 	
-	/*
+	
 	private boolean getAroundObstacle(String initialCommand)
 	{		
-
-	}
-	*/
+		if(initialCommand=="up"){
+  			if(validateDronePositionAfter("left")){
+  				moveLeft();
+  			}else if(validateDronePositionAfter("right")){
+  				moveRight();
+  			}else if(validateDronePositionAfter("forth")){
+  				moveForth();
+  			}
+ 			else if(validateDronePositionAfter("back")){
+ 				moveBack();
+  			}else{
+  				return false;
+  			}
+  		}
+  		else if(initialCommand=="down"){
+  			if(validateDronePositionAfter("left")){
+  				moveLeft();
+  			}else if(validateDronePositionAfter("right")){
+  				moveRight();
+  			}else if(validateDronePositionAfter("forth")){
+  				moveForth();
+  			}
+  			else if(validateDronePositionAfter("back")){
+ 				moveBack();
+  			}else{
+  				return false;
+  			}
+  		}
+  		else if(initialCommand=="left"){
+  			if(validateDronePositionAfter("up")){
+  				moveUp();
+  			}else if(validateDronePositionAfter("down")){
+  				moveDown();
+  			}else if(validateDronePositionAfter("forth")){
+  				moveForth();
+  			}
+  			else if(validateDronePositionAfter("back")){
+  				moveBack();
+  			}else{
+  			return false;
+  			}
+  		}
+  		else if(initialCommand=="right"){
+  			if(validateDronePositionAfter("up")){
+  				moveUp();
+  			}else if(validateDronePositionAfter("down")){
+ 				moveDown();
+  			}else if(validateDronePositionAfter("forth")){
+  			moveForth();
+  			}
+  			else if(validateDronePositionAfter("back")){
+  				moveBack();
+  			}else{
+  				return false;
+  			}
+  
+  		}
+  		if(initialCommand=="back"){
+  			if(validateDronePositionAfter("up")){
+ 				moveUp();
+  			}else if(validateDronePositionAfter("down")){
+  				moveDown();
+  			}else if(validateDronePositionAfter("left")){
+  				moveLeft();
+  			}
+			else if(validateDronePositionAfter("right")){
+  				moveRight();
+  			}else{
+ 				return false;
+  			}
+  		}
+  		if(initialCommand=="forth"){
+  			if(validateDronePositionAfter("up")){
+  				moveUp();
+  			}else if(validateDronePositionAfter("down")){
+  				moveDown();
+ 			}else if(validateDronePositionAfter("left")){
+  				moveLeft();
+  			}
+ 			else if(validateDronePositionAfter("right")){
+  				moveRight();
+  			}else{
+  				return false;
+  			}
+   
+  		}
+  		return true;
+  	}
+	
+	
 	
 	@Override
 	public String moveUp() {
