@@ -4,6 +4,7 @@ import java.util.List;
 
 public class CubeDrone extends Drone{
 	
+	
 	Cube drone = null;
 	Cube newCube = null;
 	private boolean obstacleHit = false;
