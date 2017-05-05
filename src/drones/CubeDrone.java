@@ -69,7 +69,7 @@ public class CubeDrone extends Drone{
 		obstacleHit=false;
 		return true;
 	} 
-	 
+	
 	private boolean getAroundObstacle(String initialCommand)
 	{		
 		switch(initialCommand){
