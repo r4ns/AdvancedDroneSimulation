@@ -28,7 +28,6 @@ public class CubeDroneTest {
 		Cube expectedDronePosition = new Cube(new int[] {30,2,30}, 1);
 		drone = new CubeDrone(outerCube, innerCube, new int[] {30,1,30}, 1);
 		String expectedResponse = expectedDronePosition.toString();
-		
 		assertEquals(expectedResponse, drone.moveUp());
 	}
 
@@ -43,6 +42,67 @@ public class CubeDroneTest {
 		drone = new CubeDrone(outerCube, innerCube, new int[] {30,1,30}, 1, obstacles);
 		String expectedResponse = expectedDronePosition.toString();
 		assertEquals(expectedResponse, drone.moveUp());
+	}
+	
+	@Test 
+	public void testDroneMoveLeftHitsObstacleTryToGetAround(){
+		obstacles = new ArrayList<>();
+		Cube outerCube = new Cube(new int[] {0,0,0}, 50);
+		Cube innerCube = new Cube(new int[] {10,10,10}, 30);
+		Cube expectedDronePosition = new Cube(new int[] {29,5,29}, 1);
+		obstacles.add(new Cube(new int[] {29,4,30}, 5));
+		drone = new CubeDrone(outerCube, innerCube, new int[] {30,5,30}, 1, obstacles);
+		String expectedResponse = expectedDronePosition.toString();
+		assertEquals(expectedResponse, drone.moveLeft());
+	}
+	
+	@Test
+	public void testDroneMoveRightHitsObstacleTryToGetAround()
+	{
+		obstacles = new ArrayList<>();
+		Cube outerCube = new Cube(new int[] {0,0,0}, 50);
+		Cube innerCube = new Cube(new int[] {10,10,10}, 30);
+		Cube expectedDronePosition = new Cube(new int[] {31,9,30}, 1);
+		obstacles.add(new Cube(new int[] {31,5,30}, 5));
+		drone = new CubeDrone(outerCube, innerCube, new int[] {30,5,30}, 1, obstacles);
+		String expectedResponse = expectedDronePosition.toString();
+		assertEquals(expectedResponse, drone.moveRight());
+	}
+	@Test
+	public void testDroneMoveDowntHitsObstacleTryToGetAround()
+	{
+		obstacles = new ArrayList<>();
+		Cube outerCube = new Cube(new int[] {0,0,0}, 50);
+		Cube innerCube = new Cube(new int[] {10,10,10}, 30);
+		Cube expectedDronePosition = new Cube(new int[] {30,4,30}, 1);
+		obstacles.add(new Cube(new int[] {31,5,30}, 5));
+		drone = new CubeDrone(outerCube, innerCube, new int[] {30,5,30}, 1, obstacles);
+		String expectedResponse = expectedDronePosition.toString();
+		assertEquals(expectedResponse, drone.moveDown());
+	}
+	@Test
+	public void testDroneMoveBackHitsObstacleTryToGetAround()
+	{
+		obstacles = new ArrayList<>();
+		Cube outerCube = new Cube(new int[] {0,0,0}, 50);
+		Cube innerCube = new Cube(new int[] {10,10,10}, 30);
+		Cube expectedDronePosition = new Cube(new int[] {30,5,31}, 1);
+		obstacles.add(new Cube(new int[] {31,5,30}, 5));
+		drone = new CubeDrone(outerCube, innerCube, new int[] {30,5,30}, 1, obstacles);
+		String expectedResponse = expectedDronePosition.toString();
+		assertEquals(expectedResponse, drone.moveBack());
+	}
+	@Test
+	public void testDroneMoveForthHitsObstacleTryToGetAround()
+	{
+		obstacles = new ArrayList<>();
+		Cube outerCube = new Cube(new int[] {0,0,0}, 50);
+		Cube innerCube = new Cube(new int[] {10,10,10}, 30);
+		Cube expectedDronePosition = new Cube(new int[] {30,5,29}, 1);
+		obstacles.add(new Cube(new int[] {31,5,30}, 5));
+		drone = new CubeDrone(outerCube, innerCube, new int[] {30,5,30}, 1, obstacles);
+		String expectedResponse = expectedDronePosition.toString();
+		assertEquals(expectedResponse, drone.moveForth());
 	}
 	
 }
